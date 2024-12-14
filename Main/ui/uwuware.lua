@@ -3405,7 +3405,7 @@ do
 		local function getAllConfigs()
 			local files = {};
 
-			for _, v in next, listfiles('vocats-projects/configs') do
+			for _, v in next, listfiles('QQ_6699-projects/configs') do
 				if (not isfolder(v)) then continue; end;
 
 				for _, v2 in next, listfiles(v) do
@@ -3518,7 +3518,7 @@ do
 					end;
 				end;
 
-				local configData = readfile(string.format('vocats-projects/configs/%s/%s', folderName, fullConfigName));
+				local configData = readfile(string.format('QQ_6699-projects/configs/%s/%s', folderName, fullConfigName));
 				writefile(string.format('%s/%s', library.foldername, fullConfigName), configData);
 
 				library:LoadConfig(configName);
