@@ -14,7 +14,7 @@ end;
 local Signal = getScript('signal');
 if not Signal then
     warn('Signal script failed to load! Please check the URL.');
-    Signal = { isSignal = function() return false end }; -- Fallback
+    Signal = { isSignal = function() return false end };
 end
 
 local Maid = {};
