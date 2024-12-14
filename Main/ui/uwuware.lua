@@ -35,15 +35,15 @@ if (getgenv().library) then
 	getgenv().library:Unload();
 end;
 
-if (not isfolder('vocats-projects/configs')) then
-	makefolder('vocats-projects/configs');
+if (not isfolder('qq_6699-projects/configs')) then
+	makefolder('qq_6699-projects/configs');
 end;
 
-if (not isfile('vocats-projects/configs/globalConf.bin')) then
-	writefile('vocats-projects/configs/globalConf.bin', 'true');
+if (not isfile('qq_6699-projects/configs/globalConf.bin')) then
+	writefile('qq_6699-projects/configs/globalConf.bin', 'true');
 end;
 
-local globalConfFilePath = 'vocats-projects/configs/globalConf.bin';
+local globalConfFilePath = 'qq_6699-projects/configs/globalConf.bin';
 local isGlobalConfigOn = readfile(globalConfFilePath) == 'true';
 
 local library = {
@@ -61,7 +61,7 @@ local library = {
 	configVars = {},
 	tabSize = 0,
 	theme = {},
-	foldername = isGlobalConfigOn and 'vocats-projects/configs/global' or string.format('vocats-projects/configs/%s', tostring(localPlayer.UserId)),
+	foldername = isGlobalConfigOn and 'qq_6699-projects/configs/global' or string.format('qq_6699-projects/configs/%s', tostring(localPlayer.UserId)),
 	fileext = '.json',
 	chromaColor = Color3.new()
 }
@@ -3405,7 +3405,7 @@ do
 		local function getAllConfigs()
 			local files = {};
 
-			for _, v in next, listfiles('vocats-projects/configs') do
+			for _, v in next, listfiles('qq_6699-projects/configs') do
 				if (not isfolder(v)) then continue; end;
 
 				for _, v2 in next, listfiles(v) do
@@ -3518,7 +3518,7 @@ do
 					end;
 				end;
 
-				local configData = readfile(string.format('vocats-projects/configs/%s/%s', folderName, fullConfigName));
+				local configData = readfile(string.format('qq_6699-projects/configs/%s/%s', folderName, fullConfigName));
 				writefile(string.format('%s/%s', library.foldername, fullConfigName), configData);
 
 				library:LoadConfig(configName);
