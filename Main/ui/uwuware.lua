@@ -35,35 +35,35 @@ if (getgenv().library) then
 	getgenv().library:Unload();
 end;
 
-if (not isfolder('QQ_6699-projects/configs')) then
-    makefolder('QQ_6699-projects/configs');
+if (not isfolder('vocats-projects/configs')) then
+	makefolder('vocats-projects/configs');
 end;
 
-if (not isfile('QQ_6699-projects/configs/globalConf.bin')) then
-    writefile('QQ_6699-projects/configs/globalConf.bin', 'true');
+if (not isfile('vocats-projects/configs/globalConf.bin')) then
+	writefile('vocats-projects/configs/globalConf.bin', 'true');
 end;
 
-local globalConfFilePath = 'QQ_6699-projects/configs/globalConf.bin';
+local globalConfFilePath = 'vocats-projects/configs/globalConf.bin';
 local isGlobalConfigOn = readfile(globalConfFilePath) == 'true';
 
 local library = {
-    unloadMaid = Maid.new(),
-    tabs = {},
-    draggable = true,
-    flags = {},
-    title = 'Super League Soccer | QQ_6699 CUSTOM.',
-    open = false,
-    popup = nil,
-    instances = {},
-    connections = {},
-    options = {},
-    notifications = {},
-    configVars = {},
-    tabSize = 0,
-    theme = {},
-    foldername = isGlobalConfigOn and 'QQ_6699-projects/configs/global' or string.format('QQ_6699-projects/configs/%s', tostring(localPlayer.UserId)),
-    fileext = '.json',
-    chromaColor = Color3.new()
+	unloadMaid = Maid.new(),
+	tabs = {},
+	draggable = true,
+	flags = {},
+	title = 'Super League Soccer | QQ_6699 CUSTOM.',
+	open = false,
+	popup = nil,
+	instances = {},
+	connections = {},
+	options = {},
+	notifications = {},
+	configVars = {},
+	tabSize = 0,
+	theme = {},
+	foldername = isGlobalConfigOn and 'vocats-projects/configs/global' or string.format('vocats-projects/configs/%s', tostring(localPlayer.UserId)),
+	fileext = '.json',
+	chromaColor = Color3.new()
 }
 
 library.originalTitle = library.title;
