@@ -1,13 +1,12 @@
 local Signal = {};
 Signal.__index = Signal;
 
-function Signal.new()
+function Signal.new(name)
 	local self = setmetatable({}, Signal);
-
+	self.name = name or "Unnamed Signal";
 	self._bindableEvent = Instance.new('BindableEvent');
 	self._argData = nil;
 	self._argCount = nil;
-
 	return self;
 end;
 
