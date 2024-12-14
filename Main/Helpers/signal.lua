@@ -37,7 +37,6 @@ function Signal:Connect(handler)
 	return self._bindableEvent.Event:Connect(function()
 		if self._argData then
 			handler(unpack(self._argData, 1, self._argCount));
-			print(self._argData) --
 		else
 			warn("Signal fired without arguments");
 		end
