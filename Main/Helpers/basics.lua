@@ -1,4 +1,16 @@
 local function getScript(url)
+	if (type(url) ~= 'string') then return warn('getscript failed 1'); end;
+
+	local baseUrl = 'https://raw.githubusercontent.com/Iratethisname10/roblox/refs/heads/main/helpers/';
+	local suc, res = pcall(function() return game:HttpGet(string.format('%s%s.lua', baseUrl, url)); end);
+	if (not suc or table.find({'404: Not Found', '400: Invalid Request'}, res)) then return warn('getscript failed 2'); end;
+
+	local fun, err = loadstring(res, url);
+	if (not fun) then return warn('getscript syntax err', err); end;
+
+	return fun();
+end;
+local function getScript(url)
 	print('getScript called with URL:', url)
 
 	if (type(url) ~= 'string') then
