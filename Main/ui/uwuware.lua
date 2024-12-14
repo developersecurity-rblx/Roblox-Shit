@@ -3518,7 +3518,7 @@ do
 					end;
 				end;
 
-				local configData = readfile(string.format('QQ_6699-projects/configs/%s/%s', folderName, fullConfigName));
+				local configData = readfile(string.format('vocats-projects/configs/%s/%s', folderName, fullConfigName));
 				writefile(string.format('%s/%s', library.foldername, fullConfigName), configData);
 
 				library:LoadConfig(configName);
