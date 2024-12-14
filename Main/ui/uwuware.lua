@@ -3405,7 +3405,7 @@ do
 		local function getAllConfigs()
 			local files = {};
 
-			for _, v in next, listfiles('QQ_6699-projects/configs') do
+			for _, v in next, listfiles('vocats-projects/configs') do
 				if (not isfolder(v)) then continue; end;
 
 				for _, v2 in next, listfiles(v) do
