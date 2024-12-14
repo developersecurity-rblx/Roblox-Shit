@@ -3223,7 +3223,7 @@ do
 				library.options.configList:SetValue(library.loadedConfig or 'default');
 			end);
 		else
-			print('[Library] [Config Loader] An error has occured', configData);
+			print('[Library] [Config Loader] An error has occured or No config data found.', configData);
 		end;
 
 		self:selectTab(self.tabs[1]);
