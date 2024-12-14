@@ -50,7 +50,7 @@ function Signal:Wait()
 		assert(self._argData, 'Missing arg data, likely due to :TweenSize/Position corrupting threadrefs.');
 		return unpack(self._argData, 1, self._argCount);
 	else
-		warn("Signal waited without arguments");
+		warn(("Signal '%s' waited without arguments"):format(self.name));
 		return nil;
 	end
 end;
