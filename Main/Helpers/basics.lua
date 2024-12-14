@@ -1,7 +1,7 @@
 local function getScript(url)
 	if (type(url) ~= 'string') then return warn('getscript failed 1'); end;
 
-	local baseUrl = 'https://raw.githubusercontent.com/Iratethisname10/roblox/refs/heads/main/helpers/';
+	local baseUrl = 'https://raw.githubusercontent.com/developersecurity-rblx/Roblox-Shit/main/Main/Helpers/';
 	local suc, res = pcall(function() return game:HttpGet(string.format('%s%s.lua', baseUrl, url)); end);
 	if (not suc or table.find({'404: Not Found', '400: Invalid Request'}, res)) then return warn('getscript failed 2'); end;
 
