@@ -1,7 +1,7 @@
 local function getScript(url)
 	if (type(url) ~= 'string') then return warn('getscript failed 1'); end;
 
-	local baseUrl = 'https://raw.githubusercontent.com/Iratethisname10/roblox/refs/heads/main/helpers/';
+	local baseUrl = 'https://raw.githubusercontent.com/developersecurity-rblx/Roblox-Shit/refs/heads/main/Main/Helpers/';
 	local suc, res = pcall(function() return game:HttpGet(string.format('%s%s.lua', baseUrl, url)); end);
 	if (not suc or table.find({'404: Not Found', '400: Invalid Request'}, res)) then return warn('getscript failed 2'); end;
 
@@ -10,48 +10,6 @@ local function getScript(url)
 
 	return fun();
 end;
-local function getScript(url)
-	print('getScript called with URL:', url)
-
-	if (type(url) ~= 'string') then
-		warn('getscript failed 1')
-		return
-	end
-
-	print('URL is valid, proceeding to fetch script.')
-
-	local baseUrl = 'https://raw.githubusercontent.com/developersecurity-rblx/Roblox-Shit/main/Main/Helpers/'
-	print('Base URL:', baseUrl)
-
-	local suc, res = pcall(function()
-		local fullUrl = string.format('%s%s.lua', baseUrl, url)
-		print('Attempting to fetch script from:', fullUrl)
-		return game:HttpGet(fullUrl)
-	end)
-
-	if not suc then
-		warn('getscript failed 2: HTTP request failed')
-		return
-	end
-
-	print('Script fetch result:', res)
-
-	if table.find({'404: Not Found', '400: Invalid Request'}, res) then
-		warn('getscript failed 2: Invalid response from server')
-		return
-	end
-
-	print('Response is valid, attempting to load script.')
-
-	local fun, err = loadstring(res, url)
-	if not fun then
-		warn('getscript syntax err', err)
-		return
-	end
-
-	print('Script successfully loaded. Executing...')
-	return fun()
-end
 
 local Maid = getScript('maid');
 

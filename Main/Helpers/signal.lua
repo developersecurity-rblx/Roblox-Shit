@@ -1,142 +1,58 @@
-local function getScript(url)
-    print('getScript called with URL:', url)
+local Signal = {};
+Signal.__index = Signal;
 
-    if (type(url) ~= 'string') then
-        warn('getscript failed 1')
-        return
-    end
+function Signal.new()
+	local self = setmetatable({}, Signal);
 
-    print('URL is valid, proceeding to fetch script.')
+	self._bindableEvent = Instance.new('BindableEvent');
+	self._argData = nil;
+	self._argCount = nil;
 
-    local baseUrl = 'https://raw.githubusercontent.com/developersecurity-rblx/Roblox-Shit/main/Main/Helpers/'
-    print('Base URL:', baseUrl)
-
-    local suc, res = pcall(function()
-        local fullUrl = string.format('%s%s.lua', baseUrl, url)
-        print('Attempting to fetch script from:', fullUrl)
-        return game:HttpGet(fullUrl)
-    end)
-
-    if not suc then
-        warn('getscript failed 2: HTTP request failed')
-        return
-    end
-
-    print('Script fetch result:', res)
-
-    if table.find({'404: Not Found', '400: Invalid Request'}, res) then
-        warn('getscript failed 2: Invalid response from server')
-        return
-    end
-
-    print('Response is valid, attempting to load script.')
-
-    local fun, err = loadstring(res, url)
-    if not fun then
-        warn('getscript syntax err', err)
-        return
-    end
-
-    print('Script successfully loaded. Executing...')
-    return fun()
-end
-
-local Signal = getScript('signal');
-
-local Maid = {};
-Maid.ClassName = 'Maid';
-
-function Maid.new()
-	return setmetatable({
-		_tasks = {}
-	}, Maid);
+	return self;
 end;
 
-function Maid.isMaid(value)
-	return type(value) == 'table' and value.ClassName == 'Maid';
+function Signal.isSignal(object)
+	return typeof(object) == 'table' and getmetatable(object) == Signal;
 end;
 
-function Maid.__index(self, index)
-	if (Maid[index]) then
-		return Maid[index];
-	else
-		return self._tasks[index];
+function Signal:Fire(...)
+	self._argData = {...};
+	self._argCount = select("#", ...);
+	self._bindableEvent:Fire();
+
+	---@diagnostic disable-next-line: undefined-global
+	if (not library.fixSignal) then
+		self._argData = nil;
+		self._argCount = nil;
 	end;
 end;
 
-function Maid:__newindex(index, newTask)
-	if (Maid[index] ~= nil) then
-		error(('"%s" is reserved'):format(tostring(index)), 2);
+function Signal:Connect(handler)
+	if (not self._bindableEvent) then return error('Signal has been destroyed'); end;
+
+	if (type(handler) ~= 'function') then
+		error(('connect(%s)'):format(typeof(handler)), 2);
 	end;
 
-	local tasks = self._tasks;
-	local oldTask = tasks[index];
-
-	if (oldTask == newTask) then
-		return;
-	end;
-
-	tasks[index] = newTask;
-
-	if (oldTask) then
-		if (type(oldTask) == 'function') then
-			oldTask();
-		elseif (typeof(oldTask) == 'RBXScriptConnection') then
-			oldTask:Disconnect();
-		elseif (typeof(oldTask) == 'table') then
-			table.clear(oldTask);
-		elseif (Signal.isSignal(oldTask)) then
-			oldTask:Destroy();
-		elseif (typeof(oldTask) == 'thread') then
-			task.cancel(oldTask);
-		elseif oldTask.Destroy then
-			oldTask:Destroy();
-		end;
-	end;
+	return self._bindableEvent.Event:Connect(function()
+		handler(unpack(self._argData, 1, self._argCount));
+	end);
 end;
 
-function Maid:GiveTask(task)
-	if (not task) then
-		error('Task cannot be false or nil', 2);
-	end;
-
-	local taskId = #self._tasks + 1;
-	self[taskId] = task;
-
-	return taskId;
+function Signal:Wait()
+	self._bindableEvent.Event:Wait();
+	assert(self._argData, 'Missing arg data, likely due to :TweenSize/Position corrupting threadrefs.');
+	return unpack(self._argData, 1, self._argCount);
 end;
 
-function Maid:DoCleaning()
-	local tasks = self._tasks
-
-	for index, task in pairs(tasks) do
-		if (typeof(task) == 'RBXScriptConnection') then
-			tasks[index] = nil;
-			task:Disconnect();
-		end;
+function Signal:Destroy()
+	if (self._bindableEvent) then
+		self._bindableEvent:Destroy();
+		self._bindableEvent = nil;
 	end;
 
-	local index, taskData = next(tasks);
-	while (taskData ~= nil) do
-		tasks[index] = nil;
-		if (type(taskData) == 'function') then
-			taskData()
-		elseif (typeof(taskData) == 'RBXScriptConnection') then
-			taskData:Disconnect()
-		elseif (Signal.isSignal(taskData)) then
-			taskData:Destroy();
-		elseif (typeof(taskData) == 'table') then
-			table.clear(taskData);
-		elseif (typeof(taskData) == 'thread') then
-			task.cancel(taskData);
-		elseif (taskData.Destroy) then
-			taskData:Destroy();
-		end;
-
-		index, taskData = next(tasks);
-	end;
+	self._argData = nil;
+	self._argCount = nil;
 end;
 
-Maid.Destroy = Maid.DoCleaning;
-
-return Maid;
+return Signal;
