@@ -51,7 +51,7 @@ local library = {
 	tabs = {},
 	draggable = true,
 	flags = {},
-	title = 'Super League Soccer | QQ_6699 CUSTOM.',
+	title = 'vocat\'s script | __vocat on discord',
 	open = false,
 	popup = nil,
 	instances = {},
@@ -3223,8 +3223,8 @@ do
 				library.options.configList:SetValue(library.loadedConfig or 'default');
 			end);
 		else
-			print('[Library] [Config Loader] No config data found.', configData);
-		end
+			print('[Library] [Config Loader] An error has occured', configData);
+		end;
 
 		self:selectTab(self.tabs[1]);
 
