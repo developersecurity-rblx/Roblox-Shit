@@ -12,6 +12,10 @@ local function getScript(url)
 end;
 
 local Signal = getScript('signal');
+if not Signal then
+    warn('Signal script failed to load! Please check the URL.');
+    Signal = { isSignal = function() return false end }; -- Fallback
+end
 
 local Maid = {};
 Maid.ClassName = 'Maid';
@@ -66,46 +70,49 @@ function Maid:__newindex(index, newTask)
 end;
 
 function Maid:GiveTask(task)
-	if (not task) then
-		error('Task cannot be false or nil', 2);
-	end;
+	if not task then
+		error('Task cannot be false or nil', 2)
+	end
+	if typeof(task) ~= 'function' and typeof(task) ~= 'RBXScriptConnection' and typeof(task) ~= 'thread' and not task.Destroy then
+		error('Invalid task type provided', 2)
+	end
 
-	local taskId = #self._tasks + 1;
-	self[taskId] = task;
+	local taskId = #self._tasks + 1
+	self[taskId] = task
 
-	return taskId;
-end;
+	return taskId
+end
 
 function Maid:DoCleaning()
 	local tasks = self._tasks
+	if not tasks then return end
 
 	for index, task in pairs(tasks) do
-		if (typeof(task) == 'RBXScriptConnection') then
-			tasks[index] = nil;
-			task:Disconnect();
-		end;
-	end;
+		if typeof(task) == 'RBXScriptConnection' then
+			tasks[index] = nil
+			task:Disconnect()
+		end
+	end
 
-	local index, taskData = next(tasks);
-	while (taskData ~= nil) do
-		tasks[index] = nil;
-		if (type(taskData) == 'function') then
+	local index, taskData = next(tasks)
+	while taskData ~= nil do
+		tasks[index] = nil
+		if type(taskData) == 'function' then
 			taskData()
-		elseif (typeof(taskData) == 'RBXScriptConnection') then
+		elseif typeof(taskData) == 'RBXScriptConnection' then
 			taskData:Disconnect()
-		elseif (Signal.isSignal(taskData)) then
-			taskData:Destroy();
-		elseif (typeof(taskData) == 'table') then
-			table.clear(taskData);
-		elseif (typeof(taskData) == 'thread') then
-			task.cancel(taskData);
-		elseif (taskData.Destroy) then
-			taskData:Destroy();
-		end;
-
-		index, taskData = next(tasks);
-	end;
-end;
+		elseif Signal.isSignal(taskData) then
+			taskData:Destroy()
+		elseif typeof(taskData) == 'table' then
+			table.clear(taskData)
+		elseif typeof(taskData) == 'thread' then
+			task.cancel(taskData)
+		elseif taskData.Destroy then
+			taskData:Destroy()
+		end
+		index, taskData = next(tasks)
+	end
+end
 
 Maid.Destroy = Maid.DoCleaning;
 
