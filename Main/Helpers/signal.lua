@@ -35,14 +35,23 @@ function Signal:Connect(handler)
 	end;
 
 	return self._bindableEvent.Event:Connect(function()
-		handler(unpack(self._argData, 1, self._argCount));
+		if self._argData then
+			handler(unpack(self._argData, 1, self._argCount));
+		else
+			warn("Signal fired without arguments");
+		end
 	end);
 end;
 
 function Signal:Wait()
 	self._bindableEvent.Event:Wait();
-	assert(self._argData, 'Missing arg data, likely due to :TweenSize/Position corrupting threadrefs.');
-	return unpack(self._argData, 1, self._argCount);
+	if self._argData then
+		assert(self._argData, 'Missing arg data, likely due to :TweenSize/Position corrupting threadrefs.');
+		return unpack(self._argData, 1, self._argCount);
+	else
+		warn("Signal waited without arguments");
+		return nil;
+	end
 end;
 
 function Signal:Destroy()
