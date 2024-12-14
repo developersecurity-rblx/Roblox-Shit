@@ -27,7 +27,9 @@ function Signal:Fire(...)
 end;
 
 function Signal:Connect(handler)
-	if (not self._bindableEvent) then return error('Signal has been destroyed'); end;
+	if (not self._bindableEvent) then 
+		return error('Signal has been destroyed') 
+	end;
 
 	if (type(handler) ~= 'function') then
 		error(('connect(%s)'):format(typeof(handler)), 2);
@@ -37,7 +39,7 @@ function Signal:Connect(handler)
 		if self._argData then
 			handler(unpack(self._argData, 1, self._argCount));
 		else
-			warn("Signal fired without arguments");
+			warn(("Signal '%s' fired without arguments"):format(self.name));
 		end
 	end);
 end;
